@@ -1,0 +1,45 @@
+content = """services:
+  - type: web
+    name: onepostlnkdn-web
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - fromGroup: onepostlnkdn-shared-env
+
+  - type: cron
+    name: daily-pipeline-trigger
+    env: python
+    plan: free
+    schedule: "0 11 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.agents.pipeline
+    envVars:
+      - fromGroup: onepostlnkdn-shared-env
+
+  - type: cron
+    name: auto-reject-check
+    env: python
+    plan: free
+    schedule: "*/15 * * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.services.scheduler_jobs
+    envVars:
+      - fromGroup: onepostlnkdn-shared-env
+
+  - type: cron
+    name: publish-approved-check
+    env: python
+    plan: free
+    schedule: "*/2 * * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python -m app.agents.linkedin_poster
+    envVars:
+      - fromGroup: onepostlnkdn-shared-env
+"""
+
+with open("render.yaml", "w", encoding="utf-8") as f:
+    f.write(content)
+
+print("render.yaml written successfully.")

@@ -1,0 +1,7 @@
+myvenv/
+.env
+*.db
+__pycache__/
+*.pyc
+.idea/
+data/uploads/*
