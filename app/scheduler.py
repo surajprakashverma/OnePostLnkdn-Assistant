@@ -1,6 +1,7 @@
 import truststore
 truststore.inject_into_ssl()
 
+import pytz
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
 
@@ -13,9 +14,11 @@ scheduler = BackgroundScheduler()
 
 
 def start_scheduler():
+    ist = pytz.timezone("Asia/Kolkata")
+
     scheduler.add_job(
         run_daily_pipeline,
-        trigger=CronTrigger(hour=settings.DAILY_TRIGGER_HOUR, minute=settings.DAILY_TRIGGER_MINUTE),
+        trigger=CronTrigger(hour=settings.DAILY_TRIGGER_HOUR, minute=settings.DAILY_TRIGGER_MINUTE, timezone=ist),
         id="daily_pipeline",
         replace_existing=True,
     )
@@ -37,4 +40,4 @@ def start_scheduler():
     )
 
     scheduler.start()
-    print(f"Scheduler started: daily pipeline at {settings.DAILY_TRIGGER_HOUR:02d}:{settings.DAILY_TRIGGER_MINUTE:02d}, auto-reject every 15 min, publish-check every 2 min.")
+    print(f"Scheduler started: daily pipeline at {settings.DAILY_TRIGGER_HOUR:02d}:{settings.DAILY_TRIGGER_MINUTE:02d} IST, auto-reject every 15 min, publish-check every 2 min.")
