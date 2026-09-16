@@ -13,7 +13,7 @@ import requests
 from app.core.config import settings
 
 LINKEDIN_POSTS_URL = "https://api.linkedin.com/rest/posts"
-LINKEDIN_API_VERSION = "202509"  # YYYYMM format, required header
+LINKEDIN_API_VERSION =os.getenv("LINKEDIN_API_VERSION", "202609")  # YYYYMM format, required header
 
 
 def publish_post(text: str) -> dict:
