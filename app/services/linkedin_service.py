@@ -8,6 +8,7 @@ Publishes an approved post to LinkedIn using the Posts API
 (https://api.linkedin.com/rest/posts), the current recommended
 endpoint that replaced the legacy UGC/Shares APIs.
 """
+import os
 import requests
 
 from app.core.config import settings
